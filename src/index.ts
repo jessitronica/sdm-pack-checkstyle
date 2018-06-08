@@ -1,1 +1,1 @@
-export { CheckstyleSupport } from "./checkstyleSupport";
+export { CheckstyleSupport } from "./checkstyle";
