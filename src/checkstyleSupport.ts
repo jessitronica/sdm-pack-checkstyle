@@ -21,10 +21,9 @@ import {
 } from "@atomist/sdm";
 import { checkstyleReviewerRegistration } from "@atomist/sdm/pack/checkstyle/checkstyleReviewer";
 import * as appRoot from "app-root-path";
-import * as p from "path";
 
 // tslint:disable-next-line:no-var-requires
-const pj = require(p.join(appRoot.path, "package.json"));
+const pj = require("./package.json");
 
 export interface CheckstyleSupportOptions {
     enabled: boolean;
@@ -39,7 +38,7 @@ export interface CheckstyleSupportOptions {
  */
 export const CheckstyleSupport: ExtensionPack = {
     name: pj.name,
-    vendor: pj.author,
+    vendor: pj.author.name,
     version: pj.version,
     configure: (softwareDeliveryMachine: SoftwareDeliveryMachine) => {
         const opts = softwareDeliveryMachine.configuration.sdm.checkstyle as CheckstyleSupportOptions;

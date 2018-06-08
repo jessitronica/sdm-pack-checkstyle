@@ -2,7 +2,9 @@
   "name": "@atomist/sdm-pack-checkstyle",
   "version": "0.1.0",
   "description": "Extension Pack for an Atomist SDM to integration Checkstyle",
-  "author": "Atomist, Inc.",
+  "author": {
+    "name": "Atomist, Inc."
+  },
   "license": "Apache-2.0",
   "homepage": "https://github.com/atomist/sdm-pack-checkstyle#readme",
   "repository": {
@@ -39,7 +41,7 @@
     "ts-node": "^3.3.0",
     "tslint": "^5.9.1",
     "typedoc": "^0.11.1",
-    "typescript": "2.8.3",
+    "typescript": "^2.9.1",
     "typescript-formatter": "^7.2.0"
   },
   "directories": {
