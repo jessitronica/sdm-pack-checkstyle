@@ -1,6 +1,6 @@
 # @atomist/sdm-pack-checkstyle
 
-Extension Pack for an Atomist SDM to integration Checkstyle.
+Extension Pack for an Atomist SDM to integrate Checkstyle.
 
 ## Usage
 
