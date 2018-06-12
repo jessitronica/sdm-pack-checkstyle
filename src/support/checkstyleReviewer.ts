@@ -19,11 +19,11 @@ import {
     logger,
 } from "@atomist/automation-client";
 
-import { fileExists } from "@atomist/automation-client/project/util/projectUtils";
 import { configurationValue } from "@atomist/automation-client/configuration";
 import { ProjectReview } from "@atomist/automation-client/operations/review/ReviewResult";
 import { GitProject } from "@atomist/automation-client/project/git/GitProject";
-import { ReviewerError, predicatePushTest } from "@atomist/sdm";
+import { fileExists } from "@atomist/automation-client/project/util/projectUtils";
+import { predicatePushTest, ReviewerError } from "@atomist/sdm";
 import { ReviewerRegistration } from "@atomist/sdm";
 import { spawn } from "child_process";
 import { extract } from "./checkstyleReportExtractor";
