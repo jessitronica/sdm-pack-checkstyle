@@ -18,12 +18,13 @@ import {
     HandlerContext,
     logger,
 } from "@atomist/automation-client";
+
 import { configurationValue } from "@atomist/automation-client/configuration";
 import { ProjectReview } from "@atomist/automation-client/operations/review/ReviewResult";
 import { GitProject } from "@atomist/automation-client/project/git/GitProject";
-import { ReviewerError } from "@atomist/sdm";
+import { fileExists } from "@atomist/automation-client/project/util/projectUtils";
+import { predicatePushTest, ReviewerError } from "@atomist/sdm";
 import { ReviewerRegistration } from "@atomist/sdm";
-import { IsJava } from "@atomist/sdm/mapping/pushtest/jvm/jvmPushTests";
 import { spawn } from "child_process";
 import { extract } from "./checkstyleReportExtractor";
 import { checkstyleReportToReview } from "./checkStyleReportToReview";
@@ -73,11 +74,16 @@ export const checkstyleReviewer: (checkstylePath: string) =>
         });
     };
 
+const IsJava = predicatePushTest(
+    "Is Java",
+    async p =>
+        fileExists(p, "**/*.java", () => true));
+
 export function checkstyleReviewerRegistration(considerOnlyChangedFiles: boolean): ReviewerRegistration {
     return {
         pushTest: IsJava,
         name: "Checkstyle",
         action: async cri => checkstyleReviewer(configurationValue<string>("sdm.checkstyle.path"))(cri.project, cri.context),
-        options: {considerOnlyChangedFiles},
+        options: { considerOnlyChangedFiles },
     };
 }
