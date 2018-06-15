@@ -23,13 +23,14 @@
     "url": "https://github.com/atomist/sdm-pack-checkstyle/issues"
   },
   "dependencies": {
-    "@atomist/automation-client": "0.17.2-20180605032022",
     "app-root-path": "^2.0.1"
   },
   "peerDependencies": {
-    "@atomist/sdm": ">= 0.2.1"
+    "@atomist/sdm": "^0.2.1",
+    "@atomist/automation-client": "^0.17.1"
   },
   "devDependencies": {
+    "@atomist/automation-client": "0.17.2-20180605032022",
     "@atomist/sdm": "https://r.atomist.com/SJ7x_U8xBem",
     "@types/app-root-path": "^1.2.4",
     "@types/mocha": "^2.2.48",
