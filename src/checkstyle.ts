@@ -19,10 +19,8 @@ import {
     ExtensionPack,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
+import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 import { checkstyleReviewerRegistration } from "./support/checkstyleReviewer";
-
-// tslint:disable-next-line:no-var-requires
-const pj = require("./package.json");
 
 export interface CheckstyleSupportOptions {
     enabled: boolean;
@@ -36,15 +34,13 @@ export interface CheckstyleSupportOptions {
  * @param {{useCheckstyle: boolean}} configuration
  */
 export const CheckstyleSupport: ExtensionPack = {
-    name: pj.name,
-    vendor: pj.author.name,
-    version: pj.version,
+    ...metadata(),
     configure: (softwareDeliveryMachine: SoftwareDeliveryMachine) => {
         const opts = softwareDeliveryMachine.configuration.sdm.checkstyle as CheckstyleSupportOptions;
         if (opts && opts.enabled) {
             const checkStylePath = opts.path;
             if (!!checkStylePath) {
-                softwareDeliveryMachine.addReviewerRegistrations(checkstyleReviewerRegistration(opts.reviewOnlyChangedFiles));
+                softwareDeliveryMachine.addReviewerRegistration(checkstyleReviewerRegistration(opts.reviewOnlyChangedFiles));
             } else {
                 logger.warn("Skipping Checkstyle; to enable it, set 'sdm.checkstyle.path' to the location of a downloaded checkstyle jar");
             }
