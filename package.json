@@ -27,8 +27,8 @@
     "xml2js": "^0.4.19"
   },
   "peerDependencies": {
-    "@atomist/sdm": "^0.3.1",
-    "@atomist/automation-client": "^0.17.1"
+    "@atomist/sdm": "*",
+    "@atomist/automation-client": "*"
   },
   "devDependencies": {
     "@atomist/automation-client": "1.0.0-M.1",
