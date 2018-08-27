@@ -21,9 +21,12 @@ import {
 
 import { configurationValue } from "@atomist/automation-client/configuration";
 import { ProjectReview } from "@atomist/automation-client/operations/review/ReviewResult";
-import { GitProject } from "@atomist/automation-client/project/git/GitProject";
 import { fileExists } from "@atomist/automation-client/project/util/projectUtils";
-import { predicatePushTest, ReviewerError } from "@atomist/sdm";
+import {
+    LocalProject,
+    predicatePushTest,
+    ReviewerError,
+} from "@atomist/sdm";
 import { ReviewerRegistration } from "@atomist/sdm";
 import { spawn } from "child_process";
 import { extract } from "./checkstyleReportExtractor";
@@ -37,8 +40,8 @@ import { checkstyleReportToReview } from "./checkStyleReportToReview";
  * @param {string} checkstylePath the path to the CheckStyle jar on the local machine. (see README.md)
  */
 export const checkstyleReviewer: (checkstylePath: string) =>
-    (p: GitProject, ctx: HandlerContext) => Promise<ProjectReview | ProjectReview> =
-    (checkstylePath: string) => (p: GitProject, ctx: HandlerContext) => {
+    (p: LocalProject, ctx: HandlerContext) => Promise<ProjectReview | ProjectReview> =
+    (checkstylePath: string) => (p: LocalProject, ctx: HandlerContext) => {
         // TODO switch to watchSpawned
         const childProcess = spawn(
             "java",
