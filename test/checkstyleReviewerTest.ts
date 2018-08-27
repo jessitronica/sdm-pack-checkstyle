@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-import { GitHubRepoRef } from "@atomist/automation-client/operations/common/GitHubRepoRef";
-import { GitCommandGitProject } from "@atomist/automation-client/project/git/GitCommandGitProject";
+import {NodeFsLocalProject} from "@atomist/automation-client/project/local/NodeFsLocalProject";
+import {InMemoryFile} from "@atomist/automation-client/project/mem/InMemoryFile";
+import {InMemoryProject} from "@atomist/automation-client/project/mem/InMemoryProject";
 import * as path from "path";
 import * as assert from "power-assert";
+import {tempdir} from "shelljs";
 import { checkstyleReviewer } from "../src/support/checkstyleReviewer";
 
 const checkstylePath = path.join(__dirname, "./checkstyle-8.8-all.jar");
@@ -25,22 +27,24 @@ const checkstylePath = path.join(__dirname, "./checkstyle-8.8-all.jar");
 describe("checkstyleReviewer", () => {
 
     it("should succeed in reviewing repo", async () => {
-        const p = await GitCommandGitProject.cloned({token: process.env.GITHUB_TOKEN},
-            new GitHubRepoRef("atomist-seeds", "spring-rest-seed"));
-        const review = await checkstyleReviewer(checkstylePath)(p, null);
-        assert(!!review);
-        assert(review.comments.length > 1);
+        const p = NodeFsLocalProject.copy(InMemoryProject.of(new InMemoryFile("src/Thing.java", "// Comment\n\nclass Foo{}\n")),
+        tempdir()).then(async project => {
+            const review = await checkstyleReviewer(checkstylePath)(project, null);
+            assert(!!review);
+            assert(review.comments.length > 1);
+        });
     }).timeout(10000);
 
     it("should handle invalid checkstyle path", async () => {
-        const p = await GitCommandGitProject.cloned({token: process.env.GITHUB_TOKEN},
-            new GitHubRepoRef("atomist-seeds", "spring-rest-seed"));
-        try {
-            await checkstyleReviewer("invalid checkstyle path")(p, null);
-            assert("Checkstyle should have failed with invalid path");
-        } catch {
-            // Ok
-        }
+        const p = NodeFsLocalProject.copy(InMemoryProject.of(new InMemoryFile("src/Thing.java", "// Comment\n\nclass Foo{}\n")),
+        tempdir()).then(async project => {
+            try {
+                await checkstyleReviewer("invalid checkstyle path")(project, null);
+                assert("Checkstyle should have failed with invalid path");
+            } catch {
+                // Ok
+            }
+        });
     }).timeout(10000);
 
 });

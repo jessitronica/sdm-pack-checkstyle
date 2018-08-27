@@ -23,7 +23,8 @@
     "url": "https://github.com/atomist/sdm-pack-checkstyle/issues"
   },
   "dependencies": {
-    "app-root-path": "^2.0.1"
+    "app-root-path": "^2.0.1",
+    "xml2js": "^0.4.19"
   },
   "peerDependencies": {
     "@atomist/sdm": "^0.3.1",
