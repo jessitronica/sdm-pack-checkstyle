@@ -40,7 +40,7 @@ export const CheckstyleSupport: ExtensionPack = {
         if (opts && opts.enabled) {
             const checkStylePath = opts.path;
             if (!!checkStylePath) {
-                softwareDeliveryMachine.addReviewerRegistration(checkstyleReviewerRegistration(opts.reviewOnlyChangedFiles));
+                softwareDeliveryMachine.addCodeInspectionCommand(checkstyleReviewerRegistration(opts.reviewOnlyChangedFiles));
             } else {
                 logger.warn("Skipping Checkstyle; to enable it, set 'sdm.checkstyle.path' to the location of a downloaded checkstyle jar");
             }
