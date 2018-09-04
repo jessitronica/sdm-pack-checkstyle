@@ -21,9 +21,10 @@ import {
 
 import { configurationValue } from "@atomist/automation-client/configuration";
 import { ProjectReview } from "@atomist/automation-client/operations/review/ReviewResult";
+import { isLocalProject } from "@atomist/automation-client/project/local/LocalProject";
 import { fileExists } from "@atomist/automation-client/project/util/projectUtils";
 import {
-    LocalProject,
+    CodeInspection,
     predicatePushTest,
     ReviewerError,
 } from "@atomist/sdm";
@@ -39,9 +40,11 @@ import { checkstyleReportToReview } from "./checkStyleReportToReview";
  * analysis or security tools.
  * @param {string} checkstylePath the path to the CheckStyle jar on the local machine. (see README.md)
  */
-export const checkstyleReviewer: (checkstylePath: string) =>
-    (p: LocalProject, ctx: HandlerContext) => Promise<ProjectReview | ProjectReview> =
-    (checkstylePath: string) => (p: LocalProject, ctx: HandlerContext) => {
+export function checkstyleReviewer(checkstylePath: string): CodeInspection<ProjectReview> {
+   return p => {
+        if (!isLocalProject(p)) {
+            throw new Error(`Can only run Checkstyle reviewer against local project: had ${p.id.url}`);
+        }
         // TODO switch to watchSpawned
         const childProcess = spawn(
             "java",
@@ -76,6 +79,7 @@ export const checkstyleReviewer: (checkstylePath: string) =>
             });
         });
     };
+}
 
 const IsJava = predicatePushTest(
     "Is Java",
@@ -86,7 +90,7 @@ export function checkstyleReviewerRegistration(considerOnlyChangedFiles: boolean
     return {
         pushTest: IsJava,
         name: "Checkstyle",
-        action: async cri => checkstyleReviewer(configurationValue<string>("sdm.checkstyle.path"))(cri.project, cri.context),
+        inspection: checkstyleReviewer(configurationValue<string>("sdm.checkstyle.path")),
         options: { considerOnlyChangedFiles },
     };
 }
