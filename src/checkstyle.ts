@@ -17,9 +17,9 @@
 import { logger } from "@atomist/automation-client";
 import {
     ExtensionPack,
+    metadata,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
-import { metadata } from "@atomist/sdm/api-helper/misc/extensionPack";
 import { checkstyleReviewerRegistration } from "./support/checkstyleReviewer";
 
 export interface CheckstyleSupportOptions {
