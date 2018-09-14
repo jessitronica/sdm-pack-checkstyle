@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export { CheckstyleSupport } from "./checkstyle";
+export { CheckstyleSupport } from "./lib/checkstyle";
