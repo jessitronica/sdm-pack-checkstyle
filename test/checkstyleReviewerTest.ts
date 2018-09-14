@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-import {NodeFsLocalProject} from "@atomist/automation-client/project/local/NodeFsLocalProject";
-import {InMemoryFile} from "@atomist/automation-client/project/mem/InMemoryFile";
-import {InMemoryProject} from "@atomist/automation-client/project/mem/InMemoryProject";
+import {
+    InMemoryFile,
+    InMemoryProject,
+    NodeFsLocalProject,
+} from "@atomist/automation-client";
 import * as path from "path";
 import * as assert from "power-assert";
 import {tempdir} from "shelljs";
-import { checkstyleReviewer } from "../src/support/checkstyleReviewer";
+import { checkstyleReviewer } from "../lib/support/checkstyleReviewer";
 
 const checkstylePath = path.join(__dirname, "./checkstyle-8.8-all.jar");
 

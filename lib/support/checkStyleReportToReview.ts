@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-import { logger } from "@atomist/automation-client";
-import { RepoRef } from "@atomist/automation-client/operations/common/RepoId";
 import {
+    logger,
     ProjectReview,
+    RepoRef,
     ReviewComment,
-} from "@atomist/automation-client/operations/review/ReviewResult";
+} from "@atomist/automation-client";
 import * as _ from "lodash";
 import {
     CheckstyleReport,

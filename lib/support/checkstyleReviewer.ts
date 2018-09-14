@@ -15,20 +15,20 @@
  */
 
 import {
+    configurationValue,
+    fileExists,
     HandlerContext,
+    isLocalProject,
     logger,
+    ProjectReview,
 } from "@atomist/automation-client";
 
-import { configurationValue } from "@atomist/automation-client/configuration";
-import { ProjectReview } from "@atomist/automation-client/operations/review/ReviewResult";
-import { isLocalProject } from "@atomist/automation-client/project/local/LocalProject";
-import { fileExists } from "@atomist/automation-client/project/util/projectUtils";
 import {
     CodeInspection,
     predicatePushTest,
     ReviewerError,
+    ReviewerRegistration,
 } from "@atomist/sdm";
-import { ReviewerRegistration } from "@atomist/sdm";
 import { spawn } from "child_process";
 import { extract } from "./checkstyleReportExtractor";
 import { checkstyleReportToReview } from "./checkStyleReportToReview";

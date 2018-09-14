@@ -8,7 +8,6 @@
     "jsx": "React",
     "declaration": true,
     "sourceMap": true,
-    "outDir": "build",
     "rootDir": ".",
     "lib": [
       "DOM",
