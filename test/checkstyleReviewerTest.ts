@@ -21,7 +21,7 @@ import {
 } from "@atomist/automation-client";
 import * as path from "path";
 import * as assert from "power-assert";
-import {tempdir} from "shelljs";
+import { tempdir } from "shelljs";
 import { checkstyleReviewer } from "../lib/support/checkstyleReviewer";
 
 const checkstylePath = path.join(__dirname, "./checkstyle-8.8-all.jar");
