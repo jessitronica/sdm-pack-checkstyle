@@ -16,7 +16,7 @@
 
 import * as assert from "power-assert";
 
-import { extract } from "../src/support/checkstyleReportExtractor";
+import { extract } from "../lib/support/checkstyleReportExtractor";
 
 describe("checkstyleReportExtractor", () => {
 
