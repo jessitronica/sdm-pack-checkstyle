@@ -15,8 +15,8 @@
  */
 
 import {
-    InMemoryFile,
     InMemoryProject,
+    InMemoryProjectFile,
     NodeFsLocalProject,
 } from "@atomist/automation-client";
 import * as path from "path";
@@ -29,7 +29,7 @@ const checkstylePath = path.join(__dirname, "./checkstyle-8.8-all.jar");
 describe("checkstyleReviewer", () => {
 
     it("should succeed in reviewing repo", async () => {
-        const p = NodeFsLocalProject.copy(InMemoryProject.of(new InMemoryFile("src/Thing.java", "// Comment\n\nclass Foo{}\n")),
+        const p = NodeFsLocalProject.copy(InMemoryProject.of(new InMemoryProjectFile("src/Thing.java", "// Comment\n\nclass Foo{}\n")),
         tempdir()).then(async project => {
             const review = await checkstyleReviewer(checkstylePath)(project, null);
             assert(!!review);
@@ -38,7 +38,7 @@ describe("checkstyleReviewer", () => {
     }).timeout(10000);
 
     it("should handle invalid checkstyle path", async () => {
-        const p = NodeFsLocalProject.copy(InMemoryProject.of(new InMemoryFile("src/Thing.java", "// Comment\n\nclass Foo{}\n")),
+        const p = NodeFsLocalProject.copy(InMemoryProject.of(new InMemoryProjectFile("src/Thing.java", "// Comment\n\nclass Foo{}\n")),
         tempdir()).then(async project => {
             try {
                 await checkstyleReviewer("invalid checkstyle path")(project, null);

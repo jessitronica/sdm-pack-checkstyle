@@ -16,34 +16,46 @@
 
 import { logger } from "@atomist/automation-client";
 import {
+    AutoCodeInspection,
     ExtensionPack,
     metadata,
+    ReviewListenerRegistration,
     SoftwareDeliveryMachine,
 } from "@atomist/sdm";
 import { checkstyleReviewerRegistration } from "./support/checkstyleReviewer";
 
 export interface CheckstyleSupportOptions {
     enabled: boolean;
-    path: boolean;
+    path: string;
     reviewOnlyChangedFiles: boolean;
+
+    inspectGoal?: AutoCodeInspection;
+
+    /**
+     * Review listeners that let you publish review results.
+     */
+    reviewListeners?: ReviewListenerRegistration | ReviewListenerRegistration[];
 }
 
-/**
- * Configuration common to Java SDMs, wherever they deploy
- * @param {SoftwareDeliveryMachine} softwareDeliveryMachine
- * @param {{useCheckstyle: boolean}} configuration
- */
-export const CheckstyleSupport: ExtensionPack = {
-    ...metadata(),
-    configure: (softwareDeliveryMachine: SoftwareDeliveryMachine) => {
-        const opts = softwareDeliveryMachine.configuration.sdm.checkstyle as CheckstyleSupportOptions;
-        if (opts && opts.enabled) {
-            const checkStylePath = opts.path;
-            if (!!checkStylePath) {
-                softwareDeliveryMachine.addCodeInspectionCommand(checkstyleReviewerRegistration(opts.reviewOnlyChangedFiles));
-            } else {
-                logger.warn("Skipping Checkstyle; to enable it, set 'sdm.checkstyle.path' to the location of a downloaded checkstyle jar");
+export function checkstyleSupport(options: CheckstyleSupportOptions): ExtensionPack {
+    return {
+        ...metadata(),
+        configure: sdm => {
+            if (!!options && options.enabled && !!options.inspectGoal) {
+                if (!!options.path) {
+                    options.inspectGoal.with(
+                        checkstyleReviewerRegistration(options.path, options.reviewOnlyChangedFiles));
+
+                    if (options.reviewListeners) {
+                        const listeners = Array.isArray(options.reviewListeners) ?
+                            options.reviewListeners : [options.reviewListeners];
+                        listeners.forEach(l => options.inspectGoal.withListener(l));
+                    }
+                } else {
+                    logger.warn(
+                        "Skipping Checkstyle; to enable it, set 'sdm.checkstyle.path' to the location of a downloaded checkstyle jar");
+                }
             }
-        }
-    },
-};
+        },
+    };
+}

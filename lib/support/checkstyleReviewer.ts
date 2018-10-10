@@ -16,13 +16,11 @@
 
 import {
     configurationValue,
-    fileExists,
-    HandlerContext,
     isLocalProject,
     logger,
     ProjectReview,
+    projectUtils,
 } from "@atomist/automation-client";
-
 import {
     CodeInspection,
     predicatePushTest,
@@ -41,7 +39,7 @@ import { checkstyleReportToReview } from "./checkStyleReportToReview";
  * @param {string} checkstylePath the path to the CheckStyle jar on the local machine. (see README.md)
  */
 export function checkstyleReviewer(checkstylePath: string): CodeInspection<ProjectReview> {
-   return p => {
+    return p => {
         if (!isLocalProject(p)) {
             throw new Error(`Can only run Checkstyle reviewer against local project: had ${p.id.url}`);
         }
@@ -84,13 +82,13 @@ export function checkstyleReviewer(checkstylePath: string): CodeInspection<Proje
 const IsJava = predicatePushTest(
     "Is Java",
     async p =>
-        fileExists(p, "**/*.java", () => true));
+        projectUtils.fileExists(p, "**/*.java", () => true));
 
-export function checkstyleReviewerRegistration(considerOnlyChangedFiles: boolean): ReviewerRegistration {
+export function checkstyleReviewerRegistration(path: string, considerOnlyChangedFiles: boolean): ReviewerRegistration {
     return {
         pushTest: IsJava,
         name: "Checkstyle",
-        inspection: checkstyleReviewer(configurationValue<string>("sdm.checkstyle.path")),
+        inspection: checkstyleReviewer(path),
         options: { considerOnlyChangedFiles },
     };
 }
