@@ -19,7 +19,7 @@ import * as assert from "power-assert";
 import { SimpleRepoId } from "@atomist/automation-client";
 import { extract } from "../lib/support/checkstyleReportExtractor";
 import { checkstyleReportToReview } from "../lib/support/checkStyleReportToReview";
-import { xml2valid1 } from "./checkstyleReportExtractorTest";
+import { xml2valid1 } from "./checkstyleReportExtractor.test";
 
 describe("checkstyleReportToReview", () => {
 
