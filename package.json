@@ -35,8 +35,8 @@
     "@atomist/automation-client": "*"
   },
   "devDependencies": {
-    "@atomist/automation-client": "1.0.0-RC.1",
-    "@atomist/sdm": "1.0.0-RC.1",
+    "@atomist/automation-client": "1.0.0-RC.2",
+    "@atomist/sdm": "1.0.0-RC.2",
     "@types/app-root-path": "^1.2.4",
     "@types/mocha": "^2.2.48",
     "@types/node": "^9.4.1",
