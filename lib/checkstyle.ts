@@ -14,20 +14,25 @@
  * limitations under the License.
  */
 
-import { logger } from "@atomist/automation-client";
-import {
-    AutoCodeInspection,
-    ExtensionPack,
-    metadata,
-    ReviewListenerRegistration,
-    SoftwareDeliveryMachine,
-} from "@atomist/sdm";
-import { checkstyleReviewerRegistration } from "./support/checkstyleReviewer";
+import {logger} from "@atomist/automation-client";
+import {AutoCodeInspection, ExtensionPack, metadata, ReviewListenerRegistration} from "@atomist/sdm";
+import {checkstyleReviewerRegistration} from "./support/checkstyleReviewer";
 
-export interface CheckstyleSupportOptions {
-    enabled: boolean;
-    path: string;
-    reviewOnlyChangedFiles: boolean;
+export const DefaultPathToScan = "src/main/java";
+
+export interface CheckstyleOptions {
+
+    /**
+     * Set to false to disable Checkstyle
+     */
+    enabled?: boolean;
+
+    /**
+     * Path to the checkstyle binary
+     */
+    checkstylePath: string;
+
+    reviewOnlyChangedFiles?: boolean;
 
     inspectGoal?: AutoCodeInspection;
 
@@ -35,16 +40,26 @@ export interface CheckstyleSupportOptions {
      * Review listeners that let you publish review results.
      */
     reviewListeners?: ReviewListenerRegistration | ReviewListenerRegistration[];
+
+    /**
+     * Path to look for Java files in. Defaults to src/main/java
+     */
+    pathToScan?: string;
 }
 
-export function checkstyleSupport(options: CheckstyleSupportOptions): ExtensionPack {
+/**
+ * Create an instance of the the Checkstyle extension pack.
+ * @param {CheckstyleOptions} options
+ * @return {ExtensionPack}
+ */
+export function checkstyleSupport(options: CheckstyleOptions): ExtensionPack {
     return {
         ...metadata(),
         configure: sdm => {
-            if (!!options && options.enabled && !!options.inspectGoal) {
-                if (!!options.path) {
+            if (!!options && options.enabled !== false && !!options.inspectGoal) {
+                if (!!options.checkstylePath) {
                     options.inspectGoal.with(
-                        checkstyleReviewerRegistration(options.path, options.reviewOnlyChangedFiles));
+                        checkstyleReviewerRegistration(options));
 
                     if (options.reviewListeners) {
                         const listeners = Array.isArray(options.reviewListeners) ?

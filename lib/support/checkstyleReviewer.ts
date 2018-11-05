@@ -15,7 +15,6 @@
  */
 
 import {
-    configurationValue,
     isLocalProject,
     logger,
     ProjectReview,
@@ -27,32 +26,31 @@ import {
     ReviewerError,
     ReviewerRegistration,
 } from "@atomist/sdm";
-import { spawn } from "child_process";
-import { extract } from "./checkstyleReportExtractor";
-import { checkstyleReportToReview } from "./checkStyleReportToReview";
+import {spawn} from "child_process";
+import {CheckstyleOptions, DefaultPathToScan} from "../checkstyle";
+import {extract} from "./checkstyleReportExtractor";
+import {checkstyleReportToReview} from "./checkStyleReportToReview";
 
 /**
  * Spawn Checkstyle Java process against the project directory.
  * Parse Checkstyle XML out and transform it into our ProjectReview structure.
  * An example of a common pattern for integrating third party static
  * analysis or security tools.
- * @param {string} checkstylePath the path to the CheckStyle jar on the local machine. (see README.md)
  */
-export function checkstyleReviewer(checkstylePath: string): CodeInspection<ProjectReview> {
+export function checkstyleReviewer(opts: CheckstyleOptions): CodeInspection<ProjectReview> {
     return p => {
         if (!isLocalProject(p)) {
             throw new Error(`Can only run Checkstyle reviewer against local project: had ${p.id.url}`);
         }
-        // TODO switch to watchSpawned
         const childProcess = spawn(
             "java",
             ["-jar",
-                checkstylePath,
+                opts.checkstylePath,
                 "-c",
                 "/sun_checks.xml",
-                "src/main/java",
                 "-f",
                 "xml",
+                opts.pathToScan || DefaultPathToScan,
             ],
             {
                 cwd: p.baseDir,
@@ -72,8 +70,14 @@ export function checkstyleReviewer(checkstylePath: string): CodeInspection<Proje
                     reject(new ReviewerError("CheckStyle", `Process returned ${code}: ${stderr}`, stderr));
                 }
                 return extract(stdout)
+                    .catch(err => {
+                        throw new Error(`Cannot parse checkstyle report ${stdout}`);
+                    })
                     .then(cr => resolve(checkstyleReportToReview(p.id, cr, p.baseDir)),
-                        err => reject(new ReviewerError("CheckStyle", err.msg, stderr)));
+                        err => {
+                            logger.warn("CheckStyle error: %s", err);
+                            return reject(new ReviewerError("CheckStyle", err.msg, stderr));
+                        });
             });
         });
     };
@@ -82,13 +86,12 @@ export function checkstyleReviewer(checkstylePath: string): CodeInspection<Proje
 const IsJava = predicatePushTest(
     "Is Java",
     async p =>
-        projectUtils.fileExists(p, "**/*.java", () => true));
+        projectUtils.fileExists(p, "**/*.java"));
 
-export function checkstyleReviewerRegistration(path: string, considerOnlyChangedFiles: boolean): ReviewerRegistration {
+export function checkstyleReviewerRegistration(opts: CheckstyleOptions): ReviewerRegistration {
     return {
         pushTest: IsJava,
         name: "Checkstyle",
-        inspection: checkstyleReviewer(path),
-        options: { considerOnlyChangedFiles },
+        inspection: checkstyleReviewer(opts),
     };
 }

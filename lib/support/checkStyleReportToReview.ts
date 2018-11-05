@@ -26,6 +26,13 @@ import {
     FileReport,
 } from "./CheckstyleReport";
 
+/**
+ * Convert Checkstyle report format to our internal review format
+ * @param {RepoRef} repoId
+ * @param {CheckstyleReport} cr
+ * @param {string} baseDir
+ * @return {ProjectReview}
+ */
 export function checkstyleReportToReview(repoId: RepoRef,
                                          cr: CheckstyleReport,
                                          baseDir: string): ProjectReview {

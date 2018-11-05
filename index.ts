@@ -16,5 +16,5 @@
 
 export {
     checkstyleSupport,
-    CheckstyleSupportOptions,
+    CheckstyleOptions,
 } from "./lib/checkstyle";

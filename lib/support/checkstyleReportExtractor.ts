@@ -22,6 +22,11 @@ import {
     FileReport,
 } from "./CheckstyleReport";
 
+/**
+ * Extract a Checkstyle report structure from the given XML report
+ * @param {string} report
+ * @return {Promise<CheckstyleReport>}
+ */
 export async function extract(report: string): Promise<CheckstyleReport> {
     if (report === undefined || report === null) {
         throw new Error("checkstyle report is null or undefined");

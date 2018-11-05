@@ -15,38 +15,41 @@
  */
 
 import {
-    InMemoryProject,
-    InMemoryProjectFile,
+    GitHubRepoRef,
     NodeFsLocalProject,
 } from "@atomist/automation-client";
 import * as path from "path";
 import * as assert from "power-assert";
-import { tempdir } from "shelljs";
-import { checkstyleReviewer } from "../lib/support/checkstyleReviewer";
+import * as tmp from "tmp-promise";
+import {checkstyleReviewer} from "../lib/support/checkstyleReviewer";
 
-const checkstylePath = path.join(__dirname, "./checkstyle-8.8-all.jar");
+const CheckstylePath = "./checkstyle-8.8-all.jar";
+
+const checkstylePath = path.join(__dirname, CheckstylePath);
 
 describe("checkstyleReviewer", () => {
 
     it("should succeed in reviewing repo", async () => {
-        const p = NodeFsLocalProject.copy(InMemoryProject.of(new InMemoryProjectFile("src/Thing.java", "// Comment\n\nclass Foo{}\n")),
-        tempdir()).then(async project => {
-            const review = await checkstyleReviewer(checkstylePath)(project, null);
-            assert(!!review);
-            assert(review.comments.length > 1);
-        });
+        const tmpDir = tmp.dirSync({unsafeCleanup: true}).name;
+        const project = new NodeFsLocalProject(new GitHubRepoRef("owner", "repoName", "abcd"), tmpDir);
+        await project.addFile(
+            "src/main/java/Thing.java", "// Comment\n\nclass Foo{}\n");
+        const review = await checkstyleReviewer({checkstylePath})(project, undefined);
+        assert(!!review);
+        assert(review.comments.length > 1);
     }).timeout(10000);
 
     it("should handle invalid checkstyle path", async () => {
-        const p = NodeFsLocalProject.copy(InMemoryProject.of(new InMemoryProjectFile("src/Thing.java", "// Comment\n\nclass Foo{}\n")),
-        tempdir()).then(async project => {
-            try {
-                await checkstyleReviewer("invalid checkstyle path")(project, null);
-                assert("Checkstyle should have failed with invalid path");
-            } catch {
-                // Ok
-            }
-        });
+        const tmpDir = tmp.dirSync({unsafeCleanup: true}).name;
+        const project = new NodeFsLocalProject(new GitHubRepoRef("owner", "repoName", "abcd"), tmpDir);
+        await project.addFile(
+            "src/main/java/Thing.java", "// Comment\n\nclass Foo{}\n");
+        try {
+            await checkstyleReviewer({ checkstylePath: "invalid checkstyle path"})(project, undefined);
+            assert("Checkstyle should have failed with invalid path");
+        } catch {
+            // Ok
+        }
     }).timeout(10000);
 
 });
