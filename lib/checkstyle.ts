@@ -14,9 +14,14 @@
  * limitations under the License.
  */
 
-import {logger} from "@atomist/automation-client";
-import {AutoCodeInspection, ExtensionPack, metadata, ReviewListenerRegistration} from "@atomist/sdm";
-import {checkstyleReviewerRegistration} from "./support/checkstyleReviewer";
+import { logger } from "@atomist/automation-client";
+import {
+    AutoCodeInspection,
+    ExtensionPack,
+    metadata,
+    ReviewListenerRegistration,
+} from "@atomist/sdm";
+import { checkstyleReviewerRegistration } from "./support/checkstyleReviewer";
 
 export const DefaultPathToScan = "src/main/java";
 

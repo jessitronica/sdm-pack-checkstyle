@@ -26,10 +26,13 @@ import {
     ReviewerError,
     ReviewerRegistration,
 } from "@atomist/sdm";
-import {spawn} from "child_process";
-import {CheckstyleOptions, DefaultPathToScan} from "../checkstyle";
-import {extract} from "./checkstyleReportExtractor";
-import {checkstyleReportToReview} from "./checkStyleReportToReview";
+import { spawn } from "child_process";
+import {
+    CheckstyleOptions,
+    DefaultPathToScan,
+} from "../checkstyle";
+import { extract } from "./checkstyleReportExtractor";
+import { checkstyleReportToReview } from "./checkStyleReportToReview";
 
 /**
  * Spawn Checkstyle Java process against the project directory.

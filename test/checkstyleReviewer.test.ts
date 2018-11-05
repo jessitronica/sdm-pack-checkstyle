@@ -21,7 +21,7 @@ import {
 import * as path from "path";
 import * as assert from "power-assert";
 import * as tmp from "tmp-promise";
-import {checkstyleReviewer} from "../lib/support/checkstyleReviewer";
+import { checkstyleReviewer } from "../lib/support/checkstyleReviewer";
 
 const CheckstylePath = "./checkstyle-8.8-all.jar";
 
