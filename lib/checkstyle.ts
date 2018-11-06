@@ -25,6 +25,8 @@ import { checkstyleReviewerRegistration } from "./support/checkstyleReviewer";
 
 export const DefaultPathToScan = "src/main/java";
 
+export const DefaultChecksFile = "/sun_checks.xml";
+
 export interface CheckstyleOptions {
 
     /**
@@ -50,6 +52,12 @@ export interface CheckstyleOptions {
      * Path to look for Java files in. Defaults to src/main/java
      */
     pathToScan?: string;
+
+    /**
+     * Checkstyle checks to use.
+     * Defaults to /sun_checks.xml if not specified.
+     */
+    checksFile?: string;
 }
 
 /**

@@ -28,7 +28,7 @@ import {
 } from "@atomist/sdm";
 import { spawn } from "child_process";
 import {
-    CheckstyleOptions,
+    CheckstyleOptions, DefaultChecksFile,
     DefaultPathToScan,
 } from "../checkstyle";
 import { extract } from "./checkstyleReportExtractor";
@@ -50,7 +50,7 @@ export function checkstyleReviewer(opts: CheckstyleOptions): CodeInspection<Proj
             ["-jar",
                 opts.checkstylePath,
                 "-c",
-                "/sun_checks.xml",
+                opts.checksFile || DefaultChecksFile,
                 "-f",
                 "xml",
                 opts.pathToScan || DefaultPathToScan,
