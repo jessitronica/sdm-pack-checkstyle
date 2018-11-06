@@ -18,3 +18,5 @@ export {
     checkstyleSupport,
     CheckstyleOptions,
 } from "./lib/checkstyle";
+
+export { checkstyleReviewerRegistration } from "./lib/support/checkstyleReviewer";

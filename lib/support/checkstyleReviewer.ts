@@ -91,6 +91,11 @@ const IsJava = predicatePushTest(
     async p =>
         projectUtils.fileExists(p, "**/*.java"));
 
+/**
+ * ReviewerRegistration allowing us to use this separately from extension pack
+ * @param {CheckstyleOptions} opts
+ * @return {ReviewerRegistration}
+ */
 export function checkstyleReviewerRegistration(opts: CheckstyleOptions): ReviewerRegistration {
     return {
         pushTest: IsJava,
