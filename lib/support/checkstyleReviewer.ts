@@ -28,7 +28,8 @@ import {
 } from "@atomist/sdm";
 import { spawn } from "child_process";
 import {
-    CheckstyleOptions, DefaultChecksFile,
+    CheckstyleOptions,
+    DefaultChecksFile,
     DefaultPathToScan,
 } from "../checkstyle";
 import { extract } from "./checkstyleReportExtractor";
